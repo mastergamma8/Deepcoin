@@ -8,20 +8,20 @@
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #b3e0ff;
+            background-color: #e0f7fa;
             margin: 0;
             padding: 0;
         }
         h1 {
-            color: #ff5733;
+            color: #00796b;
             margin-top: 50px;
         }
-        .task {
-            margin: 20px 0;
-            padding: 10px;
+        #taskContainer {
             background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            margin: 20px;
         }
         button {
             padding: 10px 20px;
@@ -29,20 +29,40 @@
             margin-top: 20px;
             border: none;
             border-radius: 5px;
-            background-color: #ff5733;
+            background-color: #00796b;
             color: white;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        .task {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .backArrow {
+            font-size: 30px;
+            cursor: pointer;
+            color: #00796b;
+        }
+        .backArrow:hover {
+            color: #004d40;
         }
     </style>
 </head>
 <body>
-    <h1>Tasks</h1>
-    <div class="task">
-        <p>1. Subscribe to our TikTok channel and get 1000 coins.</p>
+    <div id="taskContainer">
+        <h1>Tasks</h1>
+        <div class="task">1. Subscribe to our TikTok channel and get 1000 coins.</div>
+        <div class="task">2. Invite 3 friends and get 5000 coins.</div>
+        <div class="task">3. Share a post about Deepcoin on social media for 2000 coins.</div>
+        <div class="task">4. Complete a daily login for 100 coins each day.</div>
+        <button onclick="window.history.back();">Back</button>
     </div>
-    <div class="task">
-        <p>2. Invite 3 friends and get 5000 coins.</p>
-    </div>
-    <button onclick="window.history.back();">Back</button>
+    <div class="backArrow" onclick="window.history.back();">&#8592;</div>
 </body>
 </html>
