@@ -56,7 +56,7 @@
             color: #ff5733; /* Цвет цифры */
             pointer-events: none; /* Игнорировать события мыши */
             opacity: 0; /* Начальная непрозрачность */
-            transition: opacity 0.5s; /* Плавный переход для исчезновения */
+            transition: opacity 0.5s, transform 0.5s; /* Плавный переход для исчезновения и движения */
         }
         button {
             padding: 10px 20px;
@@ -121,13 +121,13 @@
             }, 2000); // Время загрузки 2 секунды
         });
 
-        document.getElementById('tapButton').addEventListener('click', function() {
+        document.getElementById('tapButton').addEventListener('click', function(event) {
             // Увеличиваем счёт при каждом нажатии
             score++;
             document.getElementById('score').innerText = 'Score: ' + score;
 
             // Отображаем анимацию нажатия
-            showTapCount(1);
+            showTapCount(event.clientX, event.clientY, 1); // Передаем координаты нажатия
 
             // Вибрация при нажатии
             if (navigator.vibrate) {
@@ -135,19 +135,24 @@
             }
         });
 
-        function showTapCount(count) {
+        function showTapCount(x, y, count) {
             const tapCountElement = document.getElementById('tapCount');
             tapCountElement.innerText = count; // Устанавливаем текст
             tapCountElement.style.opacity = 1; // Делаем видимым
 
-            // Позиционируем элемент на кнопке
-            const rect = document.getElementById('tapButton').getBoundingClientRect();
-            tapCountElement.style.left = rect.left + rect.width / 2 - 20 + 'px'; // Центрируем по кнопке
-            tapCountElement.style.top = rect.top + rect.height / 2 - 20 + 'px'; // Центрируем по кнопке
+            // Устанавливаем позицию элемента на координаты нажатия
+            tapCountElement.style.left = x + 'px';
+            tapCountElement.style.top = y + 'px';
+
+            // Добавляем анимацию убывания
+            setTimeout(() => {
+                tapCountElement.style.transform = 'translateY(-30px)'; // Поднимаем элемент вверх
+                tapCountElement.style.opacity = 0; // Делаем элемент невидимым
+            }, 10); // Появление сразу после установки координат
 
             // Скрываем элемент через 0.5 секунды
             setTimeout(() => {
-                tapCountElement.style.opacity = 0;
+                tapCountElement.style.transform = 'translateY(0)'; // Сбросить трансформацию
             }, 500);
         }
     </script>
