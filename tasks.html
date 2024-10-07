@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepcoin Game - Tasks</title>
+    <title>Tasks</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,45 +15,40 @@
         h1 {
             color: #ff5733; /* Яркий цвет заголовка */
             margin-top: 50px;
-            font-size: 48px; /* Увеличенный размер заголовка */
         }
-        .backButton {
-            position: absolute;
-            top: 20px; /* Отступ от верхнего края */
-            left: 20px; /* Отступ от левого края */
-            font-size: 36px; /* Размер стрелки */
-            background: none; /* Без фона */
-            border: none; /* Без рамки */
-            cursor: pointer; /* Указатель для курсора */
-            color: #ff5733; /* Цвет стрелки */
+        #tasksContainer {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px; /* Скругленные углы */
+            background-color: #ffffff; /* Белый фон для контейнера */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
         }
         .task {
-            font-size: 24px;
-            color: #333; /* Цвет текста задач */
-            margin: 20px 0; /* Отступы для задач */
+            font-size: 20px;
+            margin: 15px 0;
+            color: #555; /* Цвет текста задачи */
         }
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #555; /* Цвет текста в подвале */
+        .backButton {
+            font-size: 30px; /* Размер стрелки */
+            color: #ff5733; /* Цвет стрелки */
+            cursor: pointer; /* Курсор в виде указателя */
+            margin-top: 30px; /* Отступ сверху */
         }
     </style>
 </head>
 <body>
-    <button class="backButton" id="backToGame">&lt; Back</button>
-
-    <h1>Tasks</h1>
-    <div class="task">1. Subscribe to our TikTok channel and earn 1000 coins.</div>
-    <div class="task">2. Subscribe to our YouTube channel and earn 1000 coins.</div>
-    <div class="task">3. Invite 3 friends and earn 5000 coins.</div>
-
-    <footer>
-        &copy; 2024 Deepcoin Project. All rights reserved.
-    </footer>
+    <div id="tasksContainer">
+        <div class="backButton" id="backButton">&lt; <!-- Стрелка назад --></div>
+        <h1>Tasks</h1>
+        <div class="task">1. Subscribe to our TikTok channel and earn 1000 coins!</div>
+        <div class="task">2. Subscribe to our YouTube channel and earn 1000 coins!</div>
+        <div class="task">3. Invite 3 friends and earn 5000 coins!</div>
+        <!-- Добавьте здесь дополнительные задания, если необходимо -->
+    </div>
 
     <script>
-        document.getElementById('backToGame').addEventListener('click', function() {
-            window.location.href = 'index.html'; // Переход обратно к index.html
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back(); // Возврат на предыдущую страницу
         });
     </script>
 </body>
