@@ -1,121 +1,154 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deepcoin Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        #loginScreen, #gameContainer {
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background: white;
+            background-color: #b3e0ff; /* Светлый фон */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Запрет на прокрутку */
+        }
+        h1 {
+            color: #ff5733; /* Яркий цвет заголовка */
+            margin-top: 50px;
+            font-size: 48px; /* Увеличенный размер заголовка */
+        }
+        #welcomeScreen {
+            display: block; /* Начальный экран видим */
+            margin-top: 50px;
+        }
+        #gameContainer {
+            display: none; /* Скрываем игровую зону изначально */
+            margin-top: 20px;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        #username {
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
+            border-radius: 15px; /* Скругленные углы */
+            background-color: #ffffff; /* Белый фон для игрового контейнера */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
         }
         #score {
-            font-size: 24px;
+            font-size: 48px; /* Увеличенный размер для счета */
+            color: #ff5733; /* Яркий цвет для счета */
             margin-bottom: 20px;
+            font-weight: bold; /* Жирный шрифт для счета */
+        }
+        #tapButton {
+            width: 200px; /* Увеличиваем ширину кнопки */
+            height: 200px; /* Увеличиваем высоту кнопки */
+            border-radius: 50%; /* Круглая кнопка */
+            background-color: #ffcc00; /* Желтый цвет для кнопки */
+            border: none;
+            color: #ffffff;
+            font-size: 36px; /* Увеличиваем размер шрифта */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s; /* Плавный переход цвета кнопки */
+        }
+        #tapButton:hover {
+            background-color: #e6b800; /* Темнее при наведении */
+        }
+        #accountContainer {
+            display: none; /* Скрываем форму регистрации */
+            margin-top: 20px;
+        }
+        #taskButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff5733; /* Цвет кнопок */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #taskButton:hover {
+            background-color: #e54d30; /* Темнее при наведении */
+        }
+        .backButton {
+            font-size: 24px;
+            margin-top: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="loginScreen">
-        <h1>Вход в игру</h1>
-        <input type="text" id="username" placeholder="Введите ваше имя пользователя" required>
-        <button id="loginButton">Войти</button>
-        <button id="registerButton">Зарегистрироваться</button>
-        <p id="message"></p>
+    <div id="welcomeScreen">
+        <h1>Welcome to Deepcoin Game!</h1>
+        <p>Tap the button to start the game!</p>
+        <button id="startGame">Start Game</button>
     </div>
 
-    <div id="gameContainer" style="display: none;">
-        <div id="score">Счет: 0</div>
-        <button id="tapButton">Тапни меня!</button>
-        <button id="logoutButton">Выйти</button>
+    <div id="gameContainer">
+        <div id="score">Score: 0</div>
+        <button id="tapButton">Tap me!</button>
+        <div class="backButton" id="showTasks">&#8592; Back to Tasks</div>
     </div>
+
+    <div id="accountContainer">
+        <h2>Create Account</h2>
+        <input type="text" id="username" placeholder="Enter Username" />
+        <button id="createAccount">Create Account</button>
+    </div>
+
+    <div id="taskContainer" style="display: none;">
+        <h2>Tasks</h2>
+        <ul>
+            <li>Subscribe to our TikTok channel - +1000 coins</li>
+            <li>Subscribe to our YouTube channel - +1000 coins</li>
+            <li>Invite 3 friends - +5000 coins</li>
+        </ul>
+        <button id="closeTasks">Close</button>
+    </div>
+
+    <footer>
+        &copy; 2024 Deepcoin Project. All rights reserved.
+    </footer>
 
     <script>
         let score = 0;
-        const usernameInput = document.getElementById('username');
-        const message = document.getElementById('message');
-        const scoreDisplay = document.getElementById('score');
 
-        // Проверка на наличие аккаунта
+        // Проверка на наличие сохраненного аккаунта
         if (localStorage.getItem('username')) {
-            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'block';
-            score = parseInt(localStorage.getItem('score')) || 0; // Загружаем прогресс
-            scoreDisplay.innerText = 'Счет: ' + score;
+            score = parseInt(localStorage.getItem('score')) || 0;
+            document.getElementById('score').innerText = 'Score: ' + score;
         }
 
-        // Вход в систему
-        document.getElementById('loginButton').addEventListener('click', function() {
-            const username = usernameInput.value.trim();
-            if (username) {
-                localStorage.setItem('username', username);
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block';
-                score = parseInt(localStorage.getItem('score')) || 0; // Загружаем прогресс
-                scoreDisplay.innerText = 'Счет: ' + score;
-            } else {
-                message.innerText = 'Пожалуйста, введите имя пользователя';
-            }
+        document.getElementById('startGame').addEventListener('click', function() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'block';
         });
 
-        // Регистрация
-        document.getElementById('registerButton').addEventListener('click', function() {
-            const username = usernameInput.value.trim();
-            if (username) {
-                if (!localStorage.getItem(username)) {
-                    localStorage.setItem(username, JSON.stringify({ score: 0 }));
-                    message.innerText = 'Регистрация успешна! Теперь вы можете войти в систему.';
-                } else {
-                    message.innerText = 'Это имя пользователя уже занято.';
-                }
-            } else {
-                message.innerText = 'Пожалуйста, введите имя пользователя';
-            }
-        });
-
-        // Выход из системы
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            localStorage.removeItem('username');
-            localStorage.removeItem('score'); // Удаляем прогресс при выходе
-            document.getElementById('loginScreen').style.display = 'block';
-            document.getElementById('gameContainer').style.display = 'none';
-            scoreDisplay.innerText = 'Счет: 0'; // Сбрасываем счет
-        });
-
-        // Логика игры
         document.getElementById('tapButton').addEventListener('click', function() {
             score++; // Увеличиваем счет
-            scoreDisplay.innerText = 'Счет: ' + score; // Обновляем счет
-            localStorage.setItem('score', score); // Сохраняем прогресс
+            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
+            localStorage.setItem('score', score); // Сохраняем счет
+        });
+
+        document.getElementById('createAccount').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                localStorage.setItem('username', username); // Сохраняем имя пользователя
+                document.getElementById('accountContainer').style.display = 'none';
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+                score = parseInt(localStorage.getItem('score')) || 0;
+                document.getElementById('score').innerText = 'Score: ' + score;
+            }
+        });
+
+        document.getElementById('showTasks').addEventListener('click', function() {
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('taskContainer').style.display = 'block';
+        });
+
+        document.getElementById('closeTasks').addEventListener('click', function() {
+            document.getElementById('taskContainer').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'block';
         });
     </script>
 </body>
