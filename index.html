@@ -11,6 +11,7 @@
             background-color: #b3e0ff; /* Светлый фон */
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Скрываем скроллинг */
         }
         h1 {
             color: #ff5733; /* Яркий цвет заголовка */
@@ -141,8 +142,8 @@
             tapCountElement.style.opacity = 1; // Делаем видимым
 
             // Устанавливаем позицию элемента на координаты нажатия
-            tapCountElement.style.left = x + 'px';
-            tapCountElement.style.top = y + 'px';
+            tapCountElement.style.left = (x - 20) + 'px'; // Центрируем текст
+            tapCountElement.style.top = (y - 20) + 'px'; // Центрируем текст
 
             // Добавляем анимацию убывания
             setTimeout(() => {
@@ -150,9 +151,10 @@
                 tapCountElement.style.opacity = 0; // Делаем элемент невидимым
             }, 10); // Появление сразу после установки координат
 
-            // Скрываем элемент через 0.5 секунды
+            // Сбросить трансформацию через 0.5 секунды
             setTimeout(() => {
                 tapCountElement.style.transform = 'translateY(0)'; // Сбросить трансформацию
+                tapCountElement.style.opacity = 0; // Делаем элемент невидимым
             }, 500);
         }
     </script>
