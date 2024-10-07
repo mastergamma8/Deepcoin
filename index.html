@@ -79,18 +79,17 @@
         <h1>Welcome to Deepcoin Game!</h1>
         <p>Tap the button to start the game!</p>
         <button id="startGame">Start Game</button>
+        <div id="accountContainer">
+            <h2>Create Account</h2>
+            <input type="text" id="username" placeholder="Enter Username" />
+            <button id="createAccount">Create Account</button>
+        </div>
     </div>
 
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
         <div class="backButton" id="showTasks">&#8592; Back to Tasks</div>
-    </div>
-
-    <div id="accountContainer">
-        <h2>Create Account</h2>
-        <input type="text" id="username" placeholder="Enter Username" />
-        <button id="createAccount">Create Account</button>
     </div>
 
     <div id="taskContainer" style="display: none;">
@@ -116,6 +115,8 @@
             document.getElementById('gameContainer').style.display = 'block';
             score = parseInt(localStorage.getItem('score')) || 0;
             document.getElementById('score').innerText = 'Score: ' + score;
+        } else {
+            document.getElementById('accountContainer').style.display = 'block'; // Показываем форму регистрации
         }
 
         document.getElementById('startGame').addEventListener('click', function() {
