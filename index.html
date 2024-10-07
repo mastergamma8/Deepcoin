@@ -6,39 +6,63 @@
     <title>Deepcoin Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #f0f0f0;
+            background-color: #b3e0ff; /* Светлый фон */
             margin: 0;
             padding: 0;
         }
         h1 {
-            color: #333;
+            color: #ff5733; /* Яркий цвет заголовка */
             margin-top: 50px;
+            font-size: 48px; /* Увеличенный размер заголовка */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Тень для заголовка */
         }
         #gameContainer {
             display: none; /* Скрываем игровую зону изначально */
             margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px; /* Скругленные углы */
+            background-color: #ffffff; /* Белый фон для игрового контейнера */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
         }
         #score {
-            font-size: 24px;
-            color: #007BFF;
+            font-size: 32px; /* Увеличенный размер для счета */
+            color: #ff5733; /* Яркий цвет для счета */
             margin-bottom: 20px;
         }
         #tapButton {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #28a745;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Круглая кнопка */
+            background-color: #ffcc00; /* Желтый цвет для кнопки */
             border: none;
-            color: white;
-            font-size: 20px;
+            color: #ffffff;
+            font-size: 24px;
             cursor: pointer;
+            transition: background-color 0.3s; /* Плавный переход цвета кнопки */
+        }
+        #tapButton:hover {
+            background-color: #e6b800; /* Темнее при наведении */
         }
         button {
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 20px;
             margin-top: 20px;
+            border: none;
+            border-radius: 5px; /* Скругленные углы для кнопок */
+            background-color: #ff5733; /* Цвет кнопок */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
+        }
+        button:hover {
+            background-color: #e54d30; /* Темнее при наведении */
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555; /* Цвет текста в подвале */
         }
     </style>
 </head>
