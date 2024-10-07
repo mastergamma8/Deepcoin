@@ -16,7 +16,6 @@
             color: #ff5733; /* Яркий цвет заголовка */
             margin-top: 50px;
             font-size: 48px; /* Увеличенный размер заголовка */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Тень для заголовка */
         }
         #welcomeScreen {
             display: block; /* Начальный экран видим */
@@ -51,6 +50,20 @@
             background-color: #e6b800; /* Темнее при наведении */
             transform: scale(1.05); /* Увеличение при наведении */
         }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px; /* Скругленные углы для кнопок */
+            background-color: #ff5733; /* Цвет кнопок */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
+        }
+        button:hover {
+            background-color: #e54d30; /* Темнее при наведении */
+        }
         footer {
             margin-top: 30px;
             font-size: 14px;
@@ -61,6 +74,10 @@
             color: #ff5733; /* Цвет загрузки */
             margin-top: 20px;
         }
+        #tasksButton {
+            margin-top: 20px;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -68,12 +85,12 @@
         <h1>Welcome to Deepcoin Game!</h1>
         <p>Tap the button to start the game!</p>
         <button id="startGame">Start Game</button>
+        <button id="tasksButton">View Tasks</button> <!-- Кнопка для перехода к задачам -->
     </div>
 
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
-        <button id="showTasksButton">Show Tasks</button> <!-- Кнопка для перехода к задачам -->
     </div>
 
     <footer>
@@ -88,13 +105,10 @@
         let score = 0;
 
         document.getElementById('startGame').addEventListener('click', function() {
-            // Скрываем начальный экран и показываем экран загрузки
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('loadingScreen').style.display = 'block';
 
-            // Эмулируем загрузку игры
             setTimeout(function() {
-                // Показываем игровую зону после "загрузки"
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
             }, 2000); // Время загрузки 2 секунды
@@ -103,15 +117,10 @@
         document.getElementById('tapButton').addEventListener('click', function() {
             score++; // Увеличиваем счет
             document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-
-            // Вибрация при нажатии на кнопку
-            if (navigator.vibrate) {
-                navigator.vibrate(100); // Вибрация на 100 миллисекунд
-            }
         });
 
-        // Переход на второй файл с заданиями
-        document.getElementById('showTasksButton').addEventListener('click', function() {
+        // Добавляем обработчик для кнопки "View Tasks"
+        document.getElementById('tasksButton').addEventListener('click', function() {
             window.location.href = 'tasks.html'; // Переход к tasks.html
         });
     </script>
