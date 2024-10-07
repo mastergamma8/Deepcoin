@@ -11,14 +11,14 @@
             background-color: #b3e0ff; /* Светлый фон */
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Запрет на прокрутку */
         }
         h1 {
             color: #ff5733; /* Яркий цвет заголовка */
             margin-top: 50px;
             font-size: 48px; /* Увеличенный размер заголовка */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Тень для заголовка */
         }
-        #welcomeScreen, #accountContainer {
+        #welcomeScreen {
             display: block; /* Начальный экран видим */
             margin-top: 50px;
         }
@@ -49,35 +49,51 @@
         }
         #tapButton:hover {
             background-color: #e6b800; /* Темнее при наведении */
+            transform: scale(1.05); /* Увеличение при наведении */
         }
-        #taskButton {
-            margin-top: 20px;
+        button {
             padding: 10px 20px;
+            font-size: 20px;
+            margin-top: 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 5px; /* Скругленные углы для кнопок */
             background-color: #ff5733; /* Цвет кнопок */
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
         }
-        #taskButton:hover {
+        button:hover {
             background-color: #e54d30; /* Темнее при наведении */
         }
-        .backButton, .logoutButton, .viewAccountsButton {
-            font-size: 24px;
-            margin-top: 20px;
-            cursor: pointer;
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555; /* Цвет текста в подвале */
         }
-        .inputField {
-            margin: 10px;
-            padding: 10px;
-            font-size: 18px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        .loading {
+            font-size: 24px;
+            color: #ff5733; /* Цвет загрузки */
+            margin-top: 20px;
+        }
+        #accountContainer {
+            display: none; /* Скрываем контейнер для аккаунта */
+            margin-top: 20px;
+        }
+        #leaderboard {
+            display: none; /* Скрываем таблицу лидеров */
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         #accountsList {
+            display: none; /* Скрываем список аккаунтов */
             margin-top: 20px;
-            text-align: left;
+        }
+        .task-container {
+            display: none; /* Скрываем контейнер для заданий */
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -86,135 +102,160 @@
         <h1>Welcome to Deepcoin Game!</h1>
         <p>Tap the button to start the game!</p>
         <button id="startGame">Start Game</button>
-        <div id="accountContainer">
-            <h2>Create Account</h2>
-            <input type="text" id="username" class="inputField" placeholder="Enter Username" />
-            <input type="password" id="password" class="inputField" placeholder="Enter Password" />
-            <button id="createAccount">Create Account</button>
-            <h2>Login</h2>
-            <input type="text" id="loginUsername" class="inputField" placeholder="Enter Username" />
-            <input type="password" id="loginPassword" class="inputField" placeholder="Enter Password" />
-            <button id="login">Login</button>
-            <button id="viewAccounts" class="viewAccountsButton">View All Accounts</button>
-            <div id="accountsList" style="display: none;"></div>
-        </div>
+        <button id="createAccount">Create Account</button>
+        <button id="loginAccount">Login</button>
+        <button id="leaderboardButton">Leaderboard</button>
     </div>
 
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
-        <div class="backButton" id="showTasks">&#8592; Back to Tasks</div>
-        <div class="logoutButton" id="logout">Logout</div>
+        <button id="logout">Logout</button>
     </div>
 
-    <div id="taskContainer" style="display: none;">
-        <h2>Tasks</h2>
-        <ul>
-            <li>Subscribe to our TikTok channel - +1000 coins</li>
-            <li>Subscribe to our YouTube channel - +1000 coins</li>
-            <li>Invite 3 friends - +5000 coins</li>
-        </ul>
-        <button id="closeTasks">Close</button>
+    <div id="accountContainer">
+        <h2>Create Account</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="createBtn">Create Account</button>
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button id="loginBtn">Login</button>
+    </div>
+
+    <div id="leaderboard">
+        <h2>Leaderboard</h2>
+        <div id="accountsList"></div>
+        <button id="closeLeaderboard">Close</button>
     </div>
 
     <footer>
         &copy; 2024 Deepcoin Project. All rights reserved.
     </footer>
 
+    <div id="loadingScreen" style="display: none;">
+        <p class="loading">Loading game...</p>
+    </div>
+
+    <div id="taskContainer" class="task-container">
+        <h2>Tasks</h2>
+        <p>1. Subscribe to our TikTok channel and get 1000 coins.</p>
+        <p>2. Invite 3 friends and get 5000 coins.</p>
+        <button id="closeTasks">Close Tasks</button>
+    </div>
+
     <script>
         let score = 0;
-
-        // Получение всех аккаунтов из localStorage
-        function getAccounts() {
-            const accounts = localStorage.getItem('accounts');
-            return accounts ? JSON.parse(accounts) : [];
-        }
-
-        // Проверка на наличие сохраненного аккаунта
-        const savedAccount = getAccounts().find(acc => acc.loggedIn);
-        if (savedAccount) {
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'block';
-            score = savedAccount.score || 0;
-            document.getElementById('score').innerText = 'Score: ' + score;
-        } else {
-            document.getElementById('accountContainer').style.display = 'block'; // Показываем форму регистрации
-        }
+        let currentUser = null; // Текущий пользователь
 
         document.getElementById('startGame').addEventListener('click', function() {
+            // Скрываем начальный экран и показываем экран загрузки
             document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('loadingScreen').style.display = 'block';
+
+            // Эмулируем загрузку игры
+            setTimeout(function() {
+                // Показываем игровую зону после "загрузки"
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+            }, 2000); // Время загрузки 2 секунды
         });
 
         document.getElementById('tapButton').addEventListener('click', function() {
             score++; // Увеличиваем счет
             document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-            const accounts = getAccounts();
-            const account = accounts.find(acc => acc.loggedIn);
-            if (account) {
-                account.score = score; // Обновляем счет
-                localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем обновленный счет
-            }
         });
 
         document.getElementById('createAccount').addEventListener('click', function() {
+            document.getElementById('welcomeScreen').style.display = 'none'; // Скрываем экран приветствия
+            document.getElementById('accountContainer').style.display = 'block'; // Показываем контейнер для аккаунта
+        });
+
+        document.getElementById('createBtn').addEventListener('click', function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            if (username && password) {
-                const accounts = getAccounts();
-                accounts.push({ username, password, score: 0, loggedIn: false }); // Создаем новый аккаунт
-                localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем аккаунты
-                alert('Account created successfully!');
-                document.getElementById('accountContainer').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block';
+
+            // Проверяем, существует ли уже аккаунт с таким именем
+            const accounts = getAccounts();
+            const accountExists = accounts.some(acc => acc.username === username);
+
+            if (accountExists) {
+                alert('Account already exists!');
+                return;
             }
+
+            const newAccount = { username, password, score: 0, loggedIn: false };
+            accounts.push(newAccount);
+            localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем новый аккаунт
+
+            alert('Account created successfully!');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('accountContainer').style.display = 'none'; // Скрываем контейнер
+            document.getElementById('welcomeScreen').style.display = 'block'; // Возвращаем экран приветствия
         });
 
-        document.getElementById('login').addEventListener('click', function() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            const accounts = getAccounts();
-            const account = accounts.find(acc => acc.username === username && acc.password === password);
-            if (account) {
-                accounts.forEach(acc => acc.loggedIn = false); // Выход всех аккаунтов
-                account.loggedIn = true; // Вход в аккаунт
-                localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем обновленный массив аккаунтов
-                document.getElementById('accountContainer').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block';
-                score = account.score || 0; // Загружаем счет
-                document.getElementById('score').innerText = 'Score: ' + score;
-            } else {
-                alert('Invalid username or password!');
-            }
+        document.getElementById('loginAccount').addEventListener('click', function() {
+            document.getElementById('welcomeScreen').style.display = 'none'; // Скрываем экран приветствия
+            document.getElementById('accountContainer').style.display = 'block'; // Показываем контейнер для аккаунта
         });
+
+        document.getElementById('loginBtn').addEventListener('click',            function() {
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+
+                // Проверяем существование аккаунта
+                const accounts = getAccounts();
+                const account = accounts.find(acc => acc.username === username && acc.password === password);
+
+                if (account) {
+                    alert('Login successful!');
+                    currentUser = account; // Сохраняем текущего пользователя
+                    document.getElementById('welcomeScreen').style.display = 'none'; // Скрываем экран приветствия
+                    document.getElementById('gameContainer').style.display = 'block'; // Показываем игровую зону
+                    document.getElementById('score').innerText = 'Score: ' + account.score; // Устанавливаем начальный счет
+                } else {
+                    alert('Invalid username or password!');
+                }
+            });
 
         document.getElementById('logout').addEventListener('click', function() {
-            const accounts = getAccounts();
-            accounts.forEach(acc => acc.loggedIn = false); // Выход всех аккаунтов
-            localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем изменения
+            currentUser = null; // Сбрасываем текущего пользователя
+            score = 0; // Сбрасываем счет
+            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет
             document.getElementById('gameContainer').style.display = 'none'; // Скрываем игровую зону
             document.getElementById('welcomeScreen').style.display = 'block'; // Показываем экран приветствия
         });
 
-        document.getElementById('viewAccounts').addEventListener('click', function() {
+        document.getElementById('leaderboardButton').addEventListener('click', function() {
             const accounts = getAccounts();
+            const leaderboard = accounts.sort((a, b) => b.score - a.score).slice(0, 10); // Сортируем по счету
+
             const accountsList = document.getElementById('accountsList');
-            accountsList.innerHTML = ''; // Очищаем список аккаунтов
-            accounts.forEach(acc => {
-                const accountInfo = document.createElement('div');
-                accountInfo.innerText = `Username: ${acc.username}, Score: ${acc.score}`;
-                accountsList.appendChild(accountInfo);
+            accountsList.innerHTML = ''; // Очищаем предыдущие данные
+
+            leaderboard.forEach(acc => {
+                const div = document.createElement('div');
+                div.innerText = `${acc.username}: ${acc.score} points`;
+                accountsList.appendChild(div);
             });
-            accountsList.style.display = 'block'; // Показываем список аккаунтов
+
+            document.getElementById('leaderboard').style.display = 'block'; // Показываем таблицу лидеров
         });
 
-        document.getElementById('showTasks').addEventListener('click', function() {
-            document.getElementById('taskContainer').style.display = 'block'; // Показываем задачи
+        document.getElementById('closeLeaderboard').addEventListener('click', function() {
+            document.getElementById('leaderboard').style.display = 'none'; // Скрываем таблицу лидеров
         });
 
         document.getElementById('closeTasks').addEventListener('click', function() {
-            document.getElementById('taskContainer').style.display = 'none'; // Скрываем задачи
+            document.getElementById('taskContainer').style.display = 'none'; // Скрываем контейнер заданий
         });
+
+        function getAccounts() {
+            const accountsJson = localStorage.getItem('accounts');
+            return accountsJson ? JSON.parse(accountsJson) : []; // Возвращаем массив аккаунтов
+        }
     </script>
 </body>
 </html>
