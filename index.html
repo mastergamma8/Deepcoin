@@ -11,7 +11,6 @@
             background-color: #b3e0ff; /* Светлый фон */
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Скрываем скроллинг */
         }
         h1 {
             color: #ff5733; /* Яркий цвет заголовка */
@@ -37,22 +36,6 @@
             margin-bottom: 20px;
             font-weight: bold; /* Жирный шрифт для счета */
         }
-        #profit {
-            font-size: 24px; /* Размер шрифта для прибыли */
-            color: #007bff; /* Цвет для прибыли */
-            margin-bottom: 20px; /* Отступ от прибыли */
-        }
-        #upgradeButton {
-            width: 200px; /* Ширина кнопки для улучшения */
-            height: 50px; /* Высота кнопки для улучшения */
-            border-radius: 10px; /* Скругленные углы */
-            background-color: #28a745; /* Зеленый цвет для кнопки улучшения */
-            border: none;
-            color: #ffffff;
-            font-size: 20px; /* Размер шрифта для кнопки улучшения */
-            cursor: pointer;
-            margin-top: 10px; /* Отступ сверху */
-        }
         #tapButton {
             width: 200px; /* Увеличиваем ширину кнопки */
             height: 200px; /* Увеличиваем высоту кнопки */
@@ -64,8 +47,23 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s; /* Плавный переход цвета кнопки */
         }
-        #tapButton:active {
-            transform: scale(0.95); /* Уменьшение кнопки при нажатии */
+        #tapButton:hover {
+            background-color: #e6b800; /* Темнее при наведении */
+            transform: scale(1.05); /* Увеличение при наведении */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px; /* Скругленные углы для кнопок */
+            background-color: #ff5733; /* Цвет кнопок */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
+        }
+        button:hover {
+            background-color: #e54d30; /* Темнее при наведении */
         }
         footer {
             margin-top: 30px;
@@ -77,12 +75,13 @@
             color: #ff5733; /* Цвет загрузки */
             margin-top: 20px;
         }
-        .combo {
-            font-size: 24px;
-            color: #ff0000; /* Красный цвет для комбо */
-            position: absolute;
-            transition: transform 0.5s, opacity 0.5s; /* Плавное затухание */
-            opacity: 1; /* Полная непрозрачность */
+        #tasksContainer {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #555; /* Цвет текста заданий */
+        }
+        .task {
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -95,9 +94,18 @@
 
     <div id="gameContainer">
         <div id="score">Score: 0</div>
-        <div id="profit">Profit per hour: 0</div>
         <button id="tapButton">Tap me!</button>
-        <button id="upgradeButton">Upgrade Profit (Cost: 100)</button>
+        <div id="tasksContainer">
+            <h2>Tasks</h2>
+            <div class="task">
+                <p>Subscribe to our YouTube channel</p>
+                <button class="taskButton" data-reward="1000">Claim 1000 Coins</button>
+            </div>
+            <div class="task">
+                <p>Invite 3 friends</p>
+                <button class="taskButton" data-reward="5000">Claim 5000 Coins</button>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -110,80 +118,41 @@
 
     <script>
         let score = 0;
-        let profitPerHour = 0; // Переменная для прибыли в час
-        let comboCount = 0;
-        let comboTimeout;
-        let profitInterval;
-        const upgradeCost = 100; // Стоимость улучшения
 
         document.getElementById('startGame').addEventListener('click', function() {
+            // Скрываем начальный экран и показываем экран загрузки
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('loadingScreen').style.display = 'block';
 
+            // Эмулируем загрузку игры
             setTimeout(function() {
+                // Показываем игровую зону после "загрузки"
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
-
-                // Запускаем интервал для автоматической прибыли
-                profitInterval = setInterval(() => {
-                    score += profitPerHour / 3600; // Увеличиваем счет на прибыль в час
-                    document.getElementById('score').innerText = 'Score: ' + Math.floor(score);
-                }, 1000); // Обновляем каждую секунду
-            }, 2000);
+            }, 2000); // Время загрузки 2 секунды
         });
 
-        document.getElementById('tapButton').addEventListener('click', function(event) {
-            score++;
-            document.getElementById('score').innerText = 'Score: ' + score;
+        document.getElementById('tapButton').addEventListener('click', function() {
+            score++; // Увеличиваем счет
+            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
 
-            // Увеличиваем комбо при быстром нажатии
-            comboCount++;
-            clearTimeout(comboTimeout);
-            showCombo(event.clientX, event.clientY, comboCount);
-
-            // Вибрация при нажатии
+            // Вибрация при нажатии на кнопку
             if (navigator.vibrate) {
-                navigator.vibrate(100); // Вибрация на 100 мс
-            }
-
-            // Сбрасываем комбо через 1 секунду
-            comboTimeout = setTimeout(() => {
-                comboCount = 0;
-            }, 1000);
-        });
-
-        document.getElementById('upgradeButton').addEventListener('click', function() {
-            if (score >= upgradeCost) {
-                score -= upgradeCost; // Уменьшаем счет на стоимость улучшения
-                profitPerHour += 10; // Увеличиваем прибыль на 10
-                document.getElementById('profit').innerText = 'Profit per hour: ' + profitPerHour;
-                document.getElementById('score').innerText = 'Score: ' + Math.floor(score); // Обновляем счет
-                this.innerText = 'Upgrade Profit (Cost: ' + (upgradeCost * 2) + ')'; // Увеличиваем стоимость улучшения
-                upgradeCost *= 2; // Увеличиваем стоимость улучшения
-            } else {
-                alert('Not enough score to upgrade!');
+                navigator.vibrate(100); // Вибрация на 100 миллисекунд
             }
         });
 
-        function showCombo(x, y, count) {
-            const combo = document.createElement('div');
-            combo.className = 'combo';
-            combo.innerText = `Combo x${count}`;
-            combo.style.left = (x - 50) + 'px'; // Центрируем элемент по горизонтали
-            combo.style.top = (y - 50) + 'px'; // Центрируем элемент по вертикали
-            document.body.appendChild(combo);
-
-            // Плавное затухание
-            setTimeout(() => {
-                combo.style.opacity = 0;
-                combo.style.transform = 'translateY(-20px)'; // Уходим вверх
-            }, 50);
-
-            // Удаляем элемент из DOM через 0.5 секунды
-            setTimeout(() => {
-                combo.remove();
-            }, 500);
-        }
+        // Обработка выполнения заданий
+        const taskButtons = document.querySelectorAll('.taskButton');
+        taskButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const reward = parseInt(this.dataset.reward);
+                score += reward; // Увеличиваем счет на вознаграждение
+                document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
+                this.disabled = true; // Делаем кнопку недоступной после выполнения задания
+                this.innerText = 'Claimed!'; // Изменяем текст на кнопке
+            });
+        });
     </script>
 </body>
 </html>
