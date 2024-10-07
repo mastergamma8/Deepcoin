@@ -4,118 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deepcoin Game</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Подключение CSS -->
     <style>
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #b3e0ff; /* Светлый фон */
-            margin: 0;
-            padding: 0;
+            background-color: #ffffff; /* Убираем фон для упрощения */
         }
+
         h1 {
-            color: #ff5733; /* Яркий цвет заголовка */
-            margin-top: 50px;
-            font-size: 48px; /* Увеличенный размер заголовка */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Тень для заголовка */
+            color: #ff5733;
         }
-        #welcomeScreen {
-            display: block; /* Начальный экран видим */
-            margin-top: 50px;
-        }
+
         #gameContainer {
-            display: none; /* Скрываем игровую зону изначально */
             margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px; /* Скругленные углы */
-            background-color: #ffffff; /* Белый фон для игрового контейнера */
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
         }
+
         #score {
-            font-size: 48px; /* Увеличенный размер для счета */
-            color: #ff5733; /* Яркий цвет для счета */
-            margin-bottom: 20px;
-            font-weight: bold; /* Жирный шрифт для счета */
+            font-size: 48px;
+            color: #ff5733;
         }
+
         #tapButton {
-            width: 200px; /* Увеличиваем ширину кнопки */
-            height: 200px; /* Увеличиваем высоту кнопки */
-            border-radius: 50%; /* Круглая кнопка */
-            background-color: #ffcc00; /* Желтый цвет для кнопки */
-            border: none;
-            color: #ffffff;
-            font-size: 36px; /* Увеличиваем размер шрифта */
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s; /* Плавный переход цвета кнопки */
-        }
-        #tapButton:hover {
-            background-color: #e6b800; /* Темнее при наведении */
-            transform: scale(1.05); /* Увеличение при наведении */
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 5px; /* Скругленные углы для кнопок */
-            background-color: #ff5733; /* Цвет кнопок */
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
-        }
-        button:hover {
-            background-color: #e54d30; /* Темнее при наведении */
-        }
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #555; /* Цвет текста в подвале */
-        }
-        .loading {
             font-size: 24px;
-            color: #ff5733; /* Цвет загрузки */
-            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ffcc00; /* Цвет кнопки */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.1s; /* Добавляем эффект при нажатии */
+        }
+
+        #tapButton:active {
+            transform: scale(0.95); /* Уменьшаем кнопку при нажатии */
+        }
+
+        #welcomeContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #startGame {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #4CAF50; /* Цвет кнопки */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Эффект при наведении */
+        }
+
+        #startGame:hover {
+            background-color: #45a049; /* Темнее при наведении */
         }
     </style>
 </head>
 <body>
-    <div id="welcomeScreen">
+    <div id="welcomeContainer">
         <h1>Welcome to Deepcoin Game!</h1>
-        <p>Tap the button to start the game!</p>
         <button id="startGame">Start Game</button>
     </div>
-
-    <div id="gameContainer">
+    
+    <div id="gameContainer" style="display: none;">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
     </div>
-
-    <footer>
-        &copy; 2024 Deepcoin Project. All rights reserved.
-    </footer>
-
-    <div id="loadingScreen" style="display: none;">
-        <p class="loading">Loading game...</p>
-    </div>
-
+    
     <script>
         let score = 0;
 
+        // Обработчик события нажатия на кнопку "Start Game"
         document.getElementById('startGame').addEventListener('click', function() {
-            // Скрываем начальный экран и показываем экран загрузки
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('loadingScreen').style.display = 'block';
-
-            // Эмулируем загрузку игры
-            setTimeout(function() {
-                // Показываем игровую зону после "загрузки"
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block';
-            }, 2000); // Время загрузки 2 секунды
+            document.getElementById('welcomeContainer').style.display = 'none'; // Скрыть приветственный экран
+            document.getElementById('gameContainer').style.display = 'block'; // Показать игровой экран
         });
 
+        // Обработчик события нажатия на кнопку "Tap me!"
         document.getElementById('tapButton').addEventListener('click', function() {
-            score++; // Увеличиваем счет
-            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
+            score++;
+            document.getElementById('score').innerText = 'Score: ' + score;
+
+            // Вибрация при нажатии
+            if (navigator.vibrate) {
+                navigator.vibrate(100); // Вибрация на 100 мс
+            }
         });
     </script>
 </body>
