@@ -51,20 +51,6 @@
             background-color: #e6b800; /* Темнее при наведении */
             transform: scale(1.05); /* Увеличение при наведении */
         }
-        button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 5px; /* Скругленные углы для кнопок */
-            background-color: #ff5733; /* Цвет кнопок */
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
-        }
-        button:hover {
-            background-color: #e54d30; /* Темнее при наведении */
-        }
         footer {
             margin-top: 30px;
             font-size: 14px;
@@ -74,15 +60,6 @@
             font-size: 24px;
             color: #ff5733; /* Цвет загрузки */
             margin-top: 20px;
-        }
-        #tasksContainer {
-            margin-top: 20px;
-            font-size: 20px;
-            color: #555; /* Цвет текста заданий */
-            display: none; /* Скрываем задания изначально */
-        }
-        .task {
-            margin: 10px 0;
         }
     </style>
 </head>
@@ -96,18 +73,7 @@
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
-        <button id="showTasksButton">Show Tasks</button> <!-- Кнопка для показа заданий -->
-        <div id="tasksContainer">
-            <h2>Tasks</h2>
-            <div class="task">
-                <p>Subscribe to our YouTube channel</p>
-                <button class="taskButton" data-reward="1000">Claim 1000 Coins</button>
-            </div>
-            <div class="task">
-                <p>Invite 3 friends</p>
-                <button class="taskButton" data-reward="5000">Claim 5000 Coins</button>
-            </div>
-        </div>
+        <button id="showTasksButton">Show Tasks</button> <!-- Кнопка для перехода к задачам -->
     </div>
 
     <footer>
@@ -144,28 +110,9 @@
             }
         });
 
-        // Обработка выполнения заданий
-        const taskButtons = document.querySelectorAll('.taskButton');
-        taskButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const reward = parseInt(this.dataset.reward);
-                score += reward; // Увеличиваем счет на вознаграждение
-                document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-                this.disabled = true; // Делаем кнопку недоступной после выполнения задания
-                this.innerText = 'Claimed!'; // Изменяем текст на кнопке
-            });
-        });
-
-        // Показать или скрыть задания
+        // Переход на второй файл с заданиями
         document.getElementById('showTasksButton').addEventListener('click', function() {
-            const tasksContainer = document.getElementById('tasksContainer');
-            if (tasksContainer.style.display === 'none') {
-                tasksContainer.style.display = 'block'; // Показываем задания
-                this.innerText = 'Hide Tasks'; // Меняем текст кнопки
-            } else {
-                tasksContainer.style.display = 'none'; // Скрываем задания
-                this.innerText = 'Show Tasks'; // Меняем текст кнопки
-            }
+            window.location.href = 'tasks.html'; // Переход к tasks.html
         });
     </script>
 </body>
