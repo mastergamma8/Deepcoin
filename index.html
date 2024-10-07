@@ -51,28 +51,6 @@
         #tapButton:active {
             transform: scale(0.95); /* Уменьшение кнопки при нажатии */
         }
-        #tapCount {
-            position: absolute;
-            font-size: 48px; /* Размер шрифта для цифры */
-            color: #ff5733; /* Цвет цифры */
-            pointer-events: none; /* Игнорировать события мыши */
-            opacity: 0; /* Начальная непрозрачность */
-            transition: opacity 0.5s, transform 0.5s; /* Плавный переход для исчезновения и движения */
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 5px; /* Скругленные углы для кнопок */
-            background-color: #ff5733; /* Цвет кнопок */
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
-        }
-        button:hover {
-            background-color: #e54d30; /* Темнее при наведении */
-        }
         footer {
             margin-top: 30px;
             font-size: 14px;
@@ -82,6 +60,13 @@
             font-size: 24px;
             color: #ff5733; /* Цвет загрузки */
             margin-top: 20px;
+        }
+        .combo {
+            font-size: 24px;
+            color: #ff0000; /* Красный цвет для комбо */
+            position: absolute;
+            transition: transform 0.5s, opacity 0.5s; /* Плавное затухание */
+            opacity: 1; /* Полная непрозрачность */
         }
     </style>
 </head>
@@ -95,7 +80,6 @@
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
-        <div id="tapCount"></div> <!-- Элемент для отображения количества нажатий -->
     </div>
 
     <footer>
@@ -108,53 +92,56 @@
 
     <script>
         let score = 0;
+        let comboCount = 0;
+        let comboTimeout;
 
         document.getElementById('startGame').addEventListener('click', function() {
-            // Скрываем начальный экран и показываем экран загрузки
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('loadingScreen').style.display = 'block';
 
-            // Эмулируем загрузку игры
             setTimeout(function() {
-                // Показываем игровую зону после "загрузки"
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
-            }, 2000); // Время загрузки 2 секунды
+            }, 2000);
         });
 
         document.getElementById('tapButton').addEventListener('click', function(event) {
-            // Увеличиваем счёт при каждом нажатии
             score++;
             document.getElementById('score').innerText = 'Score: ' + score;
 
-            // Отображаем анимацию нажатия
-            showTapCount(event.clientX, event.clientY, 1); // Передаем координаты нажатия
+            // Увеличиваем комбо при быстром нажатии
+            comboCount++;
+            clearTimeout(comboTimeout);
+            showCombo(event.clientX, event.clientY, comboCount);
 
             // Вибрация при нажатии
             if (navigator.vibrate) {
                 navigator.vibrate(100); // Вибрация на 100 мс
             }
+
+            // Сбрасываем комбо через 1 секунду
+            comboTimeout = setTimeout(() => {
+                comboCount = 0;
+            }, 1000);
         });
 
-        function showTapCount(x, y, count) {
-            const tapCountElement = document.getElementById('tapCount');
-            tapCountElement.innerText = count; // Устанавливаем текст
-            tapCountElement.style.opacity = 1; // Делаем видимым
+        function showCombo(x, y, count) {
+            const combo = document.createElement('div');
+            combo.className = 'combo';
+            combo.innerText = `Combo x${count}`;
+            combo.style.left = (x - 50) + 'px'; // Центрируем элемент по горизонтали
+            combo.style.top = (y - 50) + 'px'; // Центрируем элемент по вертикали
+            document.body.appendChild(combo);
 
-            // Устанавливаем позицию элемента на координаты нажатия
-            tapCountElement.style.left = (x - 20) + 'px'; // Центрируем текст
-            tapCountElement.style.top = (y - 20) + 'px'; // Центрируем текст
-
-            // Добавляем анимацию убывания
+            // Плавное затухание
             setTimeout(() => {
-                tapCountElement.style.transform = 'translateY(-30px)'; // Поднимаем элемент вверх
-                tapCountElement.style.opacity = 0; // Делаем элемент невидимым
-            }, 10); // Появление сразу после установки координат
+                combo.style.opacity = 0;
+                combo.style.transform = 'translateY(-20px)'; // Уходим вверх
+            }, 50);
 
-            // Сбросить трансформацию через 0.5 секунды
+            // Удаляем элемент из DOM через 0.5 секунды
             setTimeout(() => {
-                tapCountElement.style.transform = 'translateY(0)'; // Сбросить трансформацию
-                tapCountElement.style.opacity = 0; // Делаем элемент невидимым
+                combo.remove();
             }, 500);
         }
     </script>
