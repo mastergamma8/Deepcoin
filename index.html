@@ -18,7 +18,7 @@
             margin-top: 50px;
             font-size: 48px; /* Увеличенный размер заголовка */
         }
-        #welcomeScreen {
+        #welcomeScreen, #accountContainer {
             display: block; /* Начальный экран видим */
             margin-top: 50px;
         }
@@ -50,10 +50,6 @@
         #tapButton:hover {
             background-color: #e6b800; /* Темнее при наведении */
         }
-        #accountContainer {
-            display: none; /* Скрываем форму регистрации */
-            margin-top: 20px;
-        }
         #taskButton {
             margin-top: 20px;
             padding: 10px 20px;
@@ -67,10 +63,17 @@
         #taskButton:hover {
             background-color: #e54d30; /* Темнее при наведении */
         }
-        .backButton {
+        .backButton, .logoutButton {
             font-size: 24px;
             margin-top: 20px;
             cursor: pointer;
+        }
+        .inputField {
+            margin: 10px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -81,8 +84,13 @@
         <button id="startGame">Start Game</button>
         <div id="accountContainer">
             <h2>Create Account</h2>
-            <input type="text" id="username" placeholder="Enter Username" />
+            <input type="text" id="username" class="inputField" placeholder="Enter Username" />
+            <input type="password" id="password" class="inputField" placeholder="Enter Password" />
             <button id="createAccount">Create Account</button>
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" class="inputField" placeholder="Enter Username" />
+            <input type="password" id="loginPassword" class="inputField" placeholder="Enter Password" />
+            <button id="login">Login</button>
         </div>
     </div>
 
@@ -90,6 +98,7 @@
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
         <div class="backButton" id="showTasks">&#8592; Back to Tasks</div>
+        <div class="logoutButton" id="logout">Logout</div>
     </div>
 
     <div id="taskContainer" style="display: none;">
@@ -110,10 +119,12 @@
         let score = 0;
 
         // Проверка на наличие сохраненного аккаунта
-        if (localStorage.getItem('username')) {
+        const savedAccount = localStorage.getItem('account');
+        if (savedAccount) {
+            const accountData = JSON.parse(savedAccount);
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'block';
-            score = parseInt(localStorage.getItem('score')) || 0;
+            score = accountData.score || 0;
             document.getElementById('score').innerText = 'Score: ' + score;
         } else {
             document.getElementById('accountContainer').style.display = 'block'; // Показываем форму регистрации
@@ -127,18 +138,36 @@
         document.getElementById('tapButton').addEventListener('click', function() {
             score++; // Увеличиваем счет
             document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-            localStorage.setItem('score', score); // Сохраняем счет
+            const savedAccount = JSON.parse(localStorage.getItem('account'));
+            if (savedAccount) {
+                savedAccount.score = score; // Обновляем счет
+                localStorage.setItem('account', JSON.stringify(savedAccount)); // Сохраняем обновленный счет
+            }
         });
 
         document.getElementById('createAccount').addEventListener('click', function() {
             const username = document.getElementById('username').value;
-            if (username) {
-                localStorage.setItem('username', username); // Сохраняем имя пользователя
+            const password = document.getElementById('password').value;
+            if (username && password) {
+                const account = { username, password, score: 0 }; // Создаем новый аккаунт
+                localStorage.setItem('account', JSON.stringify(account)); // Сохраняем аккаунт
+                alert('Account created successfully!');
                 document.getElementById('accountContainer').style.display = 'none';
-                document.getElementById('welcomeScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
-                score = parseInt(localStorage.getItem('score')) || 0;
+            }
+        });
+
+        document.getElementById('login').addEventListener('click', function() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const savedAccount = JSON.parse(localStorage.getItem('account'));
+            if (savedAccount && savedAccount.username === username && savedAccount.password === password) {
+                document.getElementById('accountContainer').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+                score = savedAccount.score || 0; // Загружаем счет
                 document.getElementById('score').innerText = 'Score: ' + score;
+            } else {
+                alert('Invalid username or password!');
             }
         });
 
@@ -150,6 +179,16 @@
         document.getElementById('closeTasks').addEventListener('click', function() {
             document.getElementById('taskContainer').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'block';
+        });
+
+        document.getElementById('logout').addEventListener('click', function() {
+            localStorage.removeItem('account'); // Удаляем аккаунт
+            score = 0; // Сбрасываем счет
+            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
+            alert('You have logged out successfully!');
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'block'; // Показываем экран приветствия
+            document.getElementById('accountContainer').style.display = 'block'; // Показываем форму регистрации
         });
     </script>
 </body>
