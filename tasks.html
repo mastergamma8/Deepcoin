@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks - Deepcoin Game</title>
+    <title>Deepcoin Game - Tasks</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -17,63 +17,43 @@
             margin-top: 50px;
             font-size: 48px; /* Увеличенный размер заголовка */
         }
-        #tasksContainer {
-            margin-top: 20px;
-            font-size: 20px;
-            color: #555; /* Цвет текста заданий */
+        .backButton {
+            position: absolute;
+            top: 20px; /* Отступ от верхнего края */
+            left: 20px; /* Отступ от левого края */
+            font-size: 36px; /* Размер стрелки */
+            background: none; /* Без фона */
+            border: none; /* Без рамки */
+            cursor: pointer; /* Указатель для курсора */
+            color: #ff5733; /* Цвет стрелки */
         }
         .task {
-            margin: 10px 0;
+            font-size: 24px;
+            color: #333; /* Цвет текста задач */
+            margin: 20px 0; /* Отступы для задач */
         }
-        button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 5px; /* Скругленные углы для кнопок */
-            background-color: #ff5733; /* Цвет кнопок */
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
-        }
-        button:hover {
-            background-color: #e54d30; /* Темнее при наведении */
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555; /* Цвет текста в подвале */
         }
     </style>
 </head>
 <body>
-    <h1>Tasks</h1>
-    <div id="tasksContainer">
-        <div class="task">
-            <p>Subscribe to our YouTube channel</p>
-            <button class="taskButton" data-reward="1000">Claim 1000 Coins</button>
-        </div>
-        <div class="task">
-            <p>Invite 3 friends</p>
-            <button class="taskButton" data-reward="5000">Claim 5000 Coins</button>
-        </div>
-    </div>
+    <button class="backButton" id="backToGame">&lt; Back</button>
 
-    <button id="backButton">Back to Game</button> <!-- Кнопка для возврата в игру -->
+    <h1>Tasks</h1>
+    <div class="task">1. Subscribe to our TikTok channel and earn 1000 coins.</div>
+    <div class="task">2. Subscribe to our YouTube channel and earn 1000 coins.</div>
+    <div class="task">3. Invite 3 friends and earn 5000 coins.</div>
+
+    <footer>
+        &copy; 2024 Deepcoin Project. All rights reserved.
+    </footer>
 
     <script>
-        let score = 0; // Объявляем переменную для счета
-
-        // Обработка выполнения заданий
-        const taskButtons = document.querySelectorAll('.taskButton');
-        taskButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const reward = parseInt(this.dataset.reward);
-                score += reward; // Увеличиваем счет на вознаграждение
-                alert('You claimed ' + reward + ' coins! Total score: ' + score); // Сообщение о вознаграждении
-                this.disabled = true; // Делаем кнопку недоступной после выполнения задания
-                this.innerText = 'Claimed!'; // Изменяем текст на кнопке
-            });
-        });
-
-        // Возврат в игру
-        document.getElementById('backButton').addEventListener('click', function() {
-            window.location.href = 'index.html'; // Возвращаемся к index.html
+        document.getElementById('backToGame').addEventListener('click', function() {
+            window.location.href = 'index.html'; // Переход обратно к index.html
         });
     </script>
 </body>
