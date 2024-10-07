@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
+    <title>Deepcoin Tasks</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,40 +15,27 @@
         h1 {
             color: #ff5733; /* Яркий цвет заголовка */
             margin-top: 50px;
-        }
-        #tasksContainer {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px; /* Скругленные углы */
-            background-color: #ffffff; /* Белый фон для контейнера */
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
-        }
-        .task {
-            font-size: 20px;
-            margin: 15px 0;
-            color: #555; /* Цвет текста задачи */
+            font-size: 48px; /* Увеличенный размер заголовка */
         }
         .backButton {
-            font-size: 30px; /* Размер стрелки */
-            color: #ff5733; /* Цвет стрелки */
-            cursor: pointer; /* Курсор в виде указателя */
-            margin-top: 30px; /* Отступ сверху */
+            font-size: 24px;
+            margin-top: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="tasksContainer">
-        <div class="backButton" id="backButton">&lt; <!-- Стрелка назад --></div>
-        <h1>Tasks</h1>
-        <div class="task">1. Subscribe to our TikTok channel and earn 1000 coins!</div>
-        <div class="task">2. Subscribe to our YouTube channel and earn 1000 coins!</div>
-        <div class="task">3. Invite 3 friends and earn 5000 coins!</div>
-        <!-- Добавьте здесь дополнительные задания, если необходимо -->
-    </div>
+    <h1>Tasks</h1>
+    <ul>
+        <li>Subscribe to our TikTok channel - +1000 coins</li>
+        <li>Subscribe to our YouTube channel - +1000 coins</li>
+        <li>Invite 3 friends - +5000 coins</li>
+    </ul>
+    <div class="backButton" id="backToGame">&#8592; Back to Game</div>
 
     <script>
-        document.getElementById('backButton').addEventListener('click', function() {
-            window.history.back(); // Возврат на предыдущую страницу
+        document.getElementById('backToGame').addEventListener('click', function() {
+            window.history.back(); // Возвращаемся к предыдущему экрану
         });
     </script>
 </body>
