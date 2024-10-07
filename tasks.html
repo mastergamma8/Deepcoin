@@ -3,40 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepcoin Tasks</title>
+    <title>Tasks - Deepcoin Game</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #b3e0ff; /* Светлый фон */
+            background-color: #b3e0ff;
             margin: 0;
             padding: 0;
         }
         h1 {
-            color: #ff5733; /* Яркий цвет заголовка */
+            color: #ff5733;
             margin-top: 50px;
-            font-size: 48px; /* Увеличенный размер заголовка */
         }
-        .backButton {
-            font-size: 24px;
+        .task {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
             margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff5733;
+            color: white;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Tasks</h1>
-    <ul>
-        <li>Subscribe to our TikTok channel - +1000 coins</li>
-        <li>Subscribe to our YouTube channel - +1000 coins</li>
-        <li>Invite 3 friends - +5000 coins</li>
-    </ul>
-    <div class="backButton" id="backToGame">&#8592; Back to Game</div>
-
-    <script>
-        document.getElementById('backToGame').addEventListener('click', function() {
-            window.history.back(); // Возвращаемся к предыдущему экрану
-        });
-    </script>
+    <div class="task">
+        <p>1. Subscribe to our TikTok channel and get 1000 coins.</p>
+    </div>
+    <div class="task">
+        <p>2. Invite 3 friends and get 5000 coins.</p>
+    </div>
+    <button onclick="window.history.back();">Back</button>
 </body>
 </html>
