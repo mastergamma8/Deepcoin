@@ -11,7 +11,6 @@
             background-color: #b3e0ff; /* Светлый фон */
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Убираем прокрутку */
         }
         h1 {
             color: #ff5733; /* Яркий цвет заголовка */
@@ -38,19 +37,26 @@
             font-weight: bold; /* Жирный шрифт для счета */
         }
         #tapButton {
-            width: 250px; /* Увеличиваем ширину кнопки */
-            height: 250px; /* Увеличиваем высоту кнопки */
+            width: 200px; /* Увеличиваем ширину кнопки */
+            height: 200px; /* Увеличиваем высоту кнопки */
             border-radius: 50%; /* Круглая кнопка */
             background-color: #ffcc00; /* Желтый цвет для кнопки */
             border: none;
             color: #ffffff;
-            font-size: 48px; /* Увеличиваем размер шрифта */
+            font-size: 36px; /* Увеличиваем размер шрифта */
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s; /* Плавный переход цвета кнопки */
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.7); /* Тень для кнопки */
         }
         #tapButton:active {
-            transform: scale(0.95); /* Эффект уменьшения при нажатии */
+            transform: scale(0.95); /* Уменьшение кнопки при нажатии */
+        }
+        #tapCount {
+            position: absolute;
+            font-size: 48px; /* Размер шрифта для цифры */
+            color: #ff5733; /* Цвет цифры */
+            pointer-events: none; /* Игнорировать события мыши */
+            opacity: 0; /* Начальная непрозрачность */
+            transition: opacity 0.5s; /* Плавный переход для исчезновения */
         }
         button {
             padding: 10px 20px;
@@ -88,6 +94,7 @@
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
+        <div id="tapCount"></div> <!-- Элемент для отображения количества нажатий -->
     </div>
 
     <footer>
@@ -102,24 +109,47 @@
         let score = 0;
 
         document.getElementById('startGame').addEventListener('click', function() {
+            // Скрываем начальный экран и показываем экран загрузки
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('loadingScreen').style.display = 'block';
 
+            // Эмулируем загрузку игры
             setTimeout(function() {
+                // Показываем игровую зону после "загрузки"
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
-            }, 2000);
+            }, 2000); // Время загрузки 2 секунды
         });
 
         document.getElementById('tapButton').addEventListener('click', function() {
+            // Увеличиваем счёт при каждом нажатии
             score++;
             document.getElementById('score').innerText = 'Score: ' + score;
+
+            // Отображаем анимацию нажатия
+            showTapCount(1);
 
             // Вибрация при нажатии
             if (navigator.vibrate) {
                 navigator.vibrate(100); // Вибрация на 100 мс
             }
         });
+
+        function showTapCount(count) {
+            const tapCountElement = document.getElementById('tapCount');
+            tapCountElement.innerText = count; // Устанавливаем текст
+            tapCountElement.style.opacity = 1; // Делаем видимым
+
+            // Позиционируем элемент на кнопке
+            const rect = document.getElementById('tapButton').getBoundingClientRect();
+            tapCountElement.style.left = rect.left + rect.width / 2 - 20 + 'px'; // Центрируем по кнопке
+            tapCountElement.style.top = rect.top + rect.height / 2 - 20 + 'px'; // Центрируем по кнопке
+
+            // Скрываем элемент через 0.5 секунды
+            setTimeout(() => {
+                tapCountElement.style.opacity = 0;
+            }, 500);
+        }
     </script>
 </body>
 </html>
