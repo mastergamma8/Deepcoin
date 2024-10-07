@@ -63,7 +63,7 @@
         #taskButton:hover {
             background-color: #e54d30; /* Темнее при наведении */
         }
-        .backButton, .logoutButton {
+        .backButton, .logoutButton, .viewAccountsButton {
             font-size: 24px;
             margin-top: 20px;
             cursor: pointer;
@@ -74,6 +74,10 @@
             font-size: 18px;
             border-radius: 5px;
             border: 1px solid #ccc;
+        }
+        #accountsList {
+            margin-top: 20px;
+            text-align: left;
         }
     </style>
 </head>
@@ -91,6 +95,8 @@
             <input type="text" id="loginUsername" class="inputField" placeholder="Enter Username" />
             <input type="password" id="loginPassword" class="inputField" placeholder="Enter Password" />
             <button id="login">Login</button>
+            <button id="viewAccounts" class="viewAccountsButton">View All Accounts</button>
+            <div id="accountsList" style="display: none;"></div>
         </div>
     </div>
 
@@ -118,13 +124,18 @@
     <script>
         let score = 0;
 
+        // Получение всех аккаунтов из localStorage
+        function getAccounts() {
+            const accounts = localStorage.getItem('accounts');
+            return accounts ? JSON.parse(accounts) : [];
+        }
+
         // Проверка на наличие сохраненного аккаунта
-        const savedAccount = localStorage.getItem('account');
+        const savedAccount = getAccounts().find(acc => acc.loggedIn);
         if (savedAccount) {
-            const accountData = JSON.parse(savedAccount);
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'block';
-            score = accountData.score || 0;
+            score = savedAccount.score || 0;
             document.getElementById('score').innerText = 'Score: ' + score;
         } else {
             document.getElementById('accountContainer').style.display = 'block'; // Показываем форму регистрации
@@ -138,10 +149,11 @@
         document.getElementById('tapButton').addEventListener('click', function() {
             score++; // Увеличиваем счет
             document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-            const savedAccount = JSON.parse(localStorage.getItem('account'));
-            if (savedAccount) {
-                savedAccount.score = score; // Обновляем счет
-                localStorage.setItem('account', JSON.stringify(savedAccount)); // Сохраняем обновленный счет
+            const accounts = getAccounts();
+            const account = accounts.find(acc => acc.loggedIn);
+            if (account) {
+                account.score = score; // Обновляем счет
+                localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем обновленный счет
             }
         });
 
@@ -149,8 +161,9 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (username && password) {
-                const account = { username, password, score: 0 }; // Создаем новый аккаунт
-                localStorage.setItem('account', JSON.stringify(account)); // Сохраняем аккаунт
+                const accounts = getAccounts();
+                accounts.push({ username, password, score: 0, loggedIn: false }); // Создаем новый аккаунт
+                localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем аккаунты
                 alert('Account created successfully!');
                 document.getElementById('accountContainer').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
@@ -160,36 +173,15 @@
         document.getElementById('login').addEventListener('click', function() {
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            const savedAccount = JSON.parse(localStorage.getItem('account'));
-            if (savedAccount && savedAccount.username === username && savedAccount.password === password) {
+            const accounts = getAccounts();
+            const account = accounts.find(acc => acc.username === username && acc.password === password);
+            if (account) {
+                accounts.forEach(acc => acc.loggedIn = false); // Выход всех аккаунтов
+                account.loggedIn = true; // Вход в аккаунт
+                localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем обновленный массив аккаунтов
                 document.getElementById('accountContainer').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
-                score = savedAccount.score || 0; // Загружаем счет
+                score = account.score || 0; // Загружаем счет
                 document.getElementById('score').innerText = 'Score: ' + score;
             } else {
                 alert('Invalid username or password!');
-            }
-        });
-
-        document.getElementById('showTasks').addEventListener('click', function() {
-            document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('taskContainer').style.display = 'block';
-        });
-
-        document.getElementById('closeTasks').addEventListener('click', function() {
-            document.getElementById('taskContainer').style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'block';
-        });
-
-        document.getElementById('logout').addEventListener('click', function() {
-            localStorage.removeItem('account'); // Удаляем аккаунт
-            score = 0; // Сбрасываем счет
-            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-            alert('You have logged out successfully!');
-            document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('welcomeScreen').style.display = 'block'; // Показываем экран приветствия
-            document.getElementById('accountContainer').style.display = 'block'; // Показываем форму регистрации
-        });
-    </script>
-</body>
-</html>
