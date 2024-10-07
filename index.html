@@ -37,6 +37,22 @@
             margin-bottom: 20px;
             font-weight: bold; /* Жирный шрифт для счета */
         }
+        #profit {
+            font-size: 24px; /* Размер шрифта для прибыли */
+            color: #007bff; /* Цвет для прибыли */
+            margin-bottom: 20px; /* Отступ от прибыли */
+        }
+        #upgradeButton {
+            width: 200px; /* Ширина кнопки для улучшения */
+            height: 50px; /* Высота кнопки для улучшения */
+            border-radius: 10px; /* Скругленные углы */
+            background-color: #28a745; /* Зеленый цвет для кнопки улучшения */
+            border: none;
+            color: #ffffff;
+            font-size: 20px; /* Размер шрифта для кнопки улучшения */
+            cursor: pointer;
+            margin-top: 10px; /* Отступ сверху */
+        }
         #tapButton {
             width: 200px; /* Увеличиваем ширину кнопки */
             height: 200px; /* Увеличиваем высоту кнопки */
@@ -79,7 +95,9 @@
 
     <div id="gameContainer">
         <div id="score">Score: 0</div>
+        <div id="profit">Profit per hour: 0</div>
         <button id="tapButton">Tap me!</button>
+        <button id="upgradeButton">Upgrade Profit (Cost: 100)</button>
     </div>
 
     <footer>
@@ -92,8 +110,11 @@
 
     <script>
         let score = 0;
+        let profitPerHour = 0; // Переменная для прибыли в час
         let comboCount = 0;
         let comboTimeout;
+        let profitInterval;
+        const upgradeCost = 100; // Стоимость улучшения
 
         document.getElementById('startGame').addEventListener('click', function() {
             document.getElementById('welcomeScreen').style.display = 'none';
@@ -102,6 +123,12 @@
             setTimeout(function() {
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
+
+                // Запускаем интервал для автоматической прибыли
+                profitInterval = setInterval(() => {
+                    score += profitPerHour / 3600; // Увеличиваем счет на прибыль в час
+                    document.getElementById('score').innerText = 'Score: ' + Math.floor(score);
+                }, 1000); // Обновляем каждую секунду
             }, 2000);
         });
 
@@ -123,6 +150,19 @@
             comboTimeout = setTimeout(() => {
                 comboCount = 0;
             }, 1000);
+        });
+
+        document.getElementById('upgradeButton').addEventListener('click', function() {
+            if (score >= upgradeCost) {
+                score -= upgradeCost; // Уменьшаем счет на стоимость улучшения
+                profitPerHour += 10; // Увеличиваем прибыль на 10
+                document.getElementById('profit').innerText = 'Profit per hour: ' + profitPerHour;
+                document.getElementById('score').innerText = 'Score: ' + Math.floor(score); // Обновляем счет
+                this.innerText = 'Upgrade Profit (Cost: ' + (upgradeCost * 2) + ')'; // Увеличиваем стоимость улучшения
+                upgradeCost *= 2; // Увеличиваем стоимость улучшения
+            } else {
+                alert('Not enough score to upgrade!');
+            }
         });
 
         function showCombo(x, y, count) {
