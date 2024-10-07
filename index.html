@@ -8,120 +8,81 @@
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #b3e0ff; /* Светлый фон */
+            background-color: #e0f7fa;
             margin: 0;
             padding: 0;
         }
-        h1 {
-            color: #ff5733; /* Яркий цвет заголовка */
-            margin-top: 50px;
-            font-size: 48px; /* Увеличенный размер заголовка */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Тень для заголовка */
-        }
-        #welcomeScreen {
-            display: block; /* Начальный экран видим */
-            margin-top: 50px;
-        }
         #gameContainer {
-            display: none; /* Скрываем игровую зону изначально */
-            margin-top: 20px;
+            display: none;
+            margin-top: 50px;
+        }
+        h1 {
+            color: #00796b;
+        }
+        #welcomeScreen, #leaderboard, #taskContainer {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 20px;
-            border-radius: 15px; /* Скругленные углы */
-            background-color: #ffffff; /* Белый фон для игрового контейнера */
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
-        }
-        #score {
-            font-size: 48px; /* Увеличенный размер для счета */
-            color: #ff5733; /* Яркий цвет для счета */
-            margin-bottom: 20px;
-            font-weight: bold; /* Жирный шрифт для счета */
-        }
-        #tapButton {
-            width: 200px; /* Увеличиваем ширину кнопки */
-            height: 200px; /* Увеличиваем высоту кнопки */
-            border-radius: 50%; /* Круглая кнопка */
-            background-color: #ffcc00; /* Желтый цвет для кнопки */
-            border: none;
-            color: #ffffff;
-            font-size: 36px; /* Увеличиваем размер шрифта */
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s; /* Плавный переход цвета кнопки */
-        }
-        #tapButton:hover {
-            background-color: #e6b800; /* Темнее при наведении */
-            transform: scale(1.05); /* Увеличение при наведении */
+            margin: 20px;
         }
         button {
             padding: 10px 20px;
             font-size: 20px;
             margin-top: 20px;
             border: none;
-            border-radius: 5px; /* Скругленные углы для кнопок */
-            background-color: #ff5733; /* Цвет кнопок */
+            border-radius: 5px;
+            background-color: #00796b;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s; /* Плавный переход цвета кнопок */
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #e54d30; /* Темнее при наведении */
+            background-color: #004d40;
         }
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #555; /* Цвет текста в подвале */
+        .leaderboardItem {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #004d40;
         }
-        .loading {
-            font-size: 24px;
-            color: #ff5733; /* Цвет загрузки */
-            margin-top: 20px;
+        #accountsList {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
         }
-        #accountContainer {
-            display: none; /* Скрываем контейнер для аккаунта */
-            margin-top: 20px;
-        }
-        #leaderboard {
-            display: none; /* Скрываем таблицу лидеров */
-            margin-top: 20px;
+        .task {
+            margin: 10px 0;
+            padding: 10px;
             background-color: #ffffff;
-            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        #accountsList {
-            display: none; /* Скрываем список аккаунтов */
-            margin-top: 20px;
+        .backArrow {
+            font-size: 30px;
+            cursor: pointer;
+            color: #00796b;
         }
-        .task-container {
-            display: none; /* Скрываем контейнер для заданий */
-            margin-top: 20px;
+        .backArrow:hover {
+            color: #004d40;
         }
     </style>
 </head>
 <body>
+    <h1>Deepcoin Game</h1>
     <div id="welcomeScreen">
-        <h1>Welcome to Deepcoin Game!</h1>
-        <p>Tap the button to start the game!</p>
-        <button id="startGame">Start Game</button>
-        <button id="createAccount">Create Account</button>
-        <button id="loginAccount">Login</button>
-        <button id="leaderboardButton">Leaderboard</button>
-    </div>
-
-    <div id="gameContainer">
-        <div id="score">Score: 0</div>
-        <button id="tapButton">Tap me!</button>
-        <button id="logout">Logout</button>
-    </div>
-
-    <div id="accountContainer">
-        <h2>Create Account</h2>
+        <h2>Welcome to Deepcoin!</h2>
         <input type="text" id="username" placeholder="Username" required>
         <input type="password" id="password" placeholder="Password" required>
-        <button id="createBtn">Create Account</button>
-        <h2>Login</h2>
-        <input type="text" id="loginUsername" placeholder="Username" required>
-        <input type="password" id="loginPassword" placeholder="Password" required>
-        <button id="loginBtn">Login</button>
+        <button id="createAccount">Create Account</button>
+        <button id="login">Login</button>
+    </div>
+    
+    <div id="gameContainer">
+        <h2 id="score">Score: 0</h2>
+        <button id="logout">Logout</button>
+        <button id="leaderboardButton">View Leaderboard</button>
+        <button id="taskButton">View Tasks</button>
     </div>
 
     <div id="leaderboard">
@@ -130,131 +91,101 @@
         <button id="closeLeaderboard">Close</button>
     </div>
 
-    <footer>
-        &copy; 2024 Deepcoin Project. All rights reserved.
-    </footer>
-
-    <div id="loadingScreen" style="display: none;">
-        <p class="loading">Loading game...</p>
-    </div>
-
-    <div id="taskContainer" class="task-container">
+    <div id="taskContainer">
         <h2>Tasks</h2>
-        <p>1. Subscribe to our TikTok channel and get 1000 coins.</p>
-        <p>2. Invite 3 friends and get 5000 coins.</p>
-        <button id="closeTasks">Close Tasks</button>
+        <div class="task">1. Subscribe to our TikTok channel and get 1000 coins.</div>
+        <div class="task">2. Invite 3 friends and get 5000 coins.</div>
+        <button id="closeTasks">Close</button>
     </div>
+
+    <div class="backArrow" onclick="window.history.back();">&#8592;</div>
 
     <script>
-        let score = 0;
-        let currentUser = null; // Текущий пользователь
-
-        document.getElementById('startGame').addEventListener('click', function() {
-            // Скрываем начальный экран и показываем экран загрузки
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('loadingScreen').style.display = 'block';
-
-            // Эмулируем загрузку игры
-            setTimeout(function() {
-                // Показываем игровую зону после "загрузки"
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block';
-            }, 2000); // Время загрузки 2 секунды
-        });
-
-        document.getElementById('tapButton').addEventListener('click', function() {
-            score++; // Увеличиваем счет
-            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет на экране
-        });
+        let currentUser = null;
 
         document.getElementById('createAccount').addEventListener('click', function() {
-            document.getElementById('welcomeScreen').style.display = 'none'; // Скрываем экран приветствия
-            document.getElementById('accountContainer').style.display = 'block'; // Показываем контейнер для аккаунта
-        });
-
-        document.getElementById('createBtn').addEventListener('click', function() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Проверяем, существует ли уже аккаунт с таким именем
             const accounts = getAccounts();
-            const accountExists = accounts.some(acc => acc.username === username);
+            const existingAccount = accounts.find(acc => acc.username === username);
 
-            if (accountExists) {
+            if (existingAccount) {
                 alert('Account already exists!');
-                return;
+            } else {
+                accounts.push({ username, password, score: 0 });
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                alert('Account created successfully!');
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+                currentUser = { username, score: 0 };
+                updateScore();
             }
-
-            const newAccount = { username, password, score: 0, loggedIn: false };
-            accounts.push(newAccount);
-            localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем новый аккаунт
-
-            alert('Account created successfully!');
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('accountContainer').style.display = 'none'; // Скрываем контейнер
-            document.getElementById('welcomeScreen').style.display = 'block'; // Возвращаем экран приветствия
         });
 
-        document.getElementById('loginAccount').addEventListener('click', function() {
-            document.getElementById('welcomeScreen').style.display = 'none'; // Скрываем экран приветствия
-            document.getElementById('accountContainer').style.display = 'block'; // Показываем контейнер для аккаунта
+        document.getElementById('login').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const accounts = getAccounts();
+            const account = accounts.find(acc => acc.username === username && acc.password === password);
+
+            if (account) {
+                alert('Login successful!');
+                currentUser = account;
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+                updateScore();
+            } else {
+                alert('Invalid username or password!');
+            }
         });
-
-        document.getElementById('loginBtn').addEventListener('click',            function() {
-                const username = document.getElementById('loginUsername').value;
-                const password = document.getElementById('loginPassword').value;
-
-                // Проверяем существование аккаунта
-                const accounts = getAccounts();
-                const account = accounts.find(acc => acc.username === username && acc.password === password);
-
-                if (account) {
-                    alert('Login successful!');
-                    currentUser = account; // Сохраняем текущего пользователя
-                    document.getElementById('welcomeScreen').style.display = 'none'; // Скрываем экран приветствия
-                    document.getElementById('gameContainer').style.display = 'block'; // Показываем игровую зону
-                    document.getElementById('score').innerText = 'Score: ' + account.score; // Устанавливаем начальный счет
-                } else {
-                    alert('Invalid username or password!');
-                }
-            });
 
         document.getElementById('logout').addEventListener('click', function() {
-            currentUser = null; // Сбрасываем текущего пользователя
-            score = 0; // Сбрасываем счет
-            document.getElementById('score').innerText = 'Score: ' + score; // Обновляем счет
-            document.getElementById('gameContainer').style.display = 'none'; // Скрываем игровую зону
-            document.getElementById('welcomeScreen').style.display = 'block'; // Показываем экран приветствия
+            currentUser = null;
+            document.getElementById('score').innerText = 'Score: 0';
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'block';
         });
 
         document.getElementById('leaderboardButton').addEventListener('click', function() {
             const accounts = getAccounts();
-            const leaderboard = accounts.sort((a, b) => b.score - a.score).slice(0, 10); // Сортируем по счету
+            const leaderboard = accounts.sort((a, b) => b.score - a.score).slice(0, 10);
 
             const accountsList = document.getElementById('accountsList');
-            accountsList.innerHTML = ''; // Очищаем предыдущие данные
+            accountsList.innerHTML = '';
 
             leaderboard.forEach(acc => {
                 const div = document.createElement('div');
+                div.className = 'leaderboardItem';
                 div.innerText = `${acc.username}: ${acc.score} points`;
                 accountsList.appendChild(div);
             });
 
-            document.getElementById('leaderboard').style.display = 'block'; // Показываем таблицу лидеров
+            document.getElementById('leaderboard').style.display = 'block';
         });
 
         document.getElementById('closeLeaderboard').addEventListener('click', function() {
-            document.getElementById('leaderboard').style.display = 'none'; // Скрываем таблицу лидеров
+            document.getElementById('leaderboard').style.display = 'none';
+        });
+
+        document.getElementById('taskButton').addEventListener('click', function() {
+            document.getElementById('taskContainer').style.display = 'block';
         });
 
         document.getElementById('closeTasks').addEventListener('click', function() {
-            document.getElementById('taskContainer').style.display = 'none'; // Скрываем контейнер заданий
+            document.getElementById('taskContainer').style.display = 'none';
         });
 
         function getAccounts() {
             const accountsJson = localStorage.getItem('accounts');
-            return accountsJson ? JSON.parse(accountsJson) : []; // Возвращаем массив аккаунтов
+            return accountsJson ? JSON.parse(accountsJson) : [];
+        }
+
+        function updateScore() {
+            if (currentUser) {
+                document.getElementById('score').innerText = 'Score: ' + currentUser.score;
+            }
         }
     </script>
 </body>
