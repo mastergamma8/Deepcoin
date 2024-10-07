@@ -185,3 +185,36 @@
                 document.getElementById('score').innerText = 'Score: ' + score;
             } else {
                 alert('Invalid username or password!');
+            }
+        });
+
+        document.getElementById('logout').addEventListener('click', function() {
+            const accounts = getAccounts();
+            accounts.forEach(acc => acc.loggedIn = false); // Выход всех аккаунтов
+            localStorage.setItem('accounts', JSON.stringify(accounts)); // Сохраняем изменения
+            document.getElementById('gameContainer').style.display = 'none'; // Скрываем игровую зону
+            document.getElementById('welcomeScreen').style.display = 'block'; // Показываем экран приветствия
+        });
+
+        document.getElementById('viewAccounts').addEventListener('click', function() {
+            const accounts = getAccounts();
+            const accountsList = document.getElementById('accountsList');
+            accountsList.innerHTML = ''; // Очищаем список аккаунтов
+            accounts.forEach(acc => {
+                const accountInfo = document.createElement('div');
+                accountInfo.innerText = `Username: ${acc.username}, Score: ${acc.score}`;
+                accountsList.appendChild(accountInfo);
+            });
+            accountsList.style.display = 'block'; // Показываем список аккаунтов
+        });
+
+        document.getElementById('showTasks').addEventListener('click', function() {
+            document.getElementById('taskContainer').style.display = 'block'; // Показываем задачи
+        });
+
+        document.getElementById('closeTasks').addEventListener('click', function() {
+            document.getElementById('taskContainer').style.display = 'none'; // Скрываем задачи
+        });
+    </script>
+</body>
+</html>
