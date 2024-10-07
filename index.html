@@ -18,6 +18,10 @@
             font-size: 48px; /* Увеличенный размер заголовка */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Тень для заголовка */
         }
+        #welcomeScreen {
+            display: block; /* Начальный экран видим */
+            margin-top: 50px;
+        }
         #gameContainer {
             display: none; /* Скрываем игровую зону изначально */
             margin-top: 20px;
@@ -27,23 +31,25 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Тень вокруг контейнера */
         }
         #score {
-            font-size: 32px; /* Увеличенный размер для счета */
+            font-size: 48px; /* Увеличенный размер для счета */
             color: #ff5733; /* Яркий цвет для счета */
             margin-bottom: 20px;
+            font-weight: bold; /* Жирный шрифт для счета */
         }
         #tapButton {
-            width: 120px;
-            height: 120px;
+            width: 200px; /* Увеличиваем ширину кнопки */
+            height: 200px; /* Увеличиваем высоту кнопки */
             border-radius: 50%; /* Круглая кнопка */
             background-color: #ffcc00; /* Желтый цвет для кнопки */
             border: none;
             color: #ffffff;
-            font-size: 24px;
+            font-size: 36px; /* Увеличиваем размер шрифта */
             cursor: pointer;
-            transition: background-color 0.3s; /* Плавный переход цвета кнопки */
+            transition: background-color 0.3s, transform 0.1s; /* Плавный переход цвета кнопки */
         }
         #tapButton:hover {
             background-color: #e6b800; /* Темнее при наведении */
+            transform: scale(1.05); /* Увеличение при наведении */
         }
         button {
             padding: 10px 20px;
@@ -64,12 +70,19 @@
             font-size: 14px;
             color: #555; /* Цвет текста в подвале */
         }
+        .loading {
+            font-size: 24px;
+            color: #ff5733; /* Цвет загрузки */
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to Deepcoin Game!</h1>
-    <p>Click the button to start playing!</p>
-    <button id="startGame">Start Game</button>
+    <div id="welcomeScreen">
+        <h1>Welcome to Deepcoin Game!</h1>
+        <p>Tap the button to start the game!</p>
+        <button id="startGame">Start Game</button>
+    </div>
 
     <div id="gameContainer">
         <div id="score">Score: 0</div>
@@ -80,13 +93,24 @@
         &copy; 2024 Deepcoin Project. All rights reserved.
     </footer>
 
+    <div id="loadingScreen" style="display: none;">
+        <p class="loading">Loading game...</p>
+    </div>
+
     <script>
         let score = 0;
 
         document.getElementById('startGame').addEventListener('click', function() {
-            // Скрываем кнопку старта и показываем игровую зону
-            document.getElementById('startGame').style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'block';
+            // Скрываем начальный экран и показываем экран загрузки
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('loadingScreen').style.display = 'block';
+
+            // Эмулируем загрузку игры
+            setTimeout(function() {
+                // Показываем игровую зону после "загрузки"
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+            }, 2000); // Время загрузки 2 секунды
         });
 
         document.getElementById('tapButton').addEventListener('click', function() {
