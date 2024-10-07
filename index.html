@@ -79,6 +79,7 @@
             margin-top: 20px;
             font-size: 20px;
             color: #555; /* Цвет текста заданий */
+            display: none; /* Скрываем задания изначально */
         }
         .task {
             margin: 10px 0;
@@ -95,6 +96,7 @@
     <div id="gameContainer">
         <div id="score">Score: 0</div>
         <button id="tapButton">Tap me!</button>
+        <button id="showTasksButton">Show Tasks</button> <!-- Кнопка для показа заданий -->
         <div id="tasksContainer">
             <h2>Tasks</h2>
             <div class="task">
@@ -152,6 +154,18 @@
                 this.disabled = true; // Делаем кнопку недоступной после выполнения задания
                 this.innerText = 'Claimed!'; // Изменяем текст на кнопке
             });
+        });
+
+        // Показать или скрыть задания
+        document.getElementById('showTasksButton').addEventListener('click', function() {
+            const tasksContainer = document.getElementById('tasksContainer');
+            if (tasksContainer.style.display === 'none') {
+                tasksContainer.style.display = 'block'; // Показываем задания
+                this.innerText = 'Hide Tasks'; // Меняем текст кнопки
+            } else {
+                tasksContainer.style.display = 'none'; // Скрываем задания
+                this.innerText = 'Show Tasks'; // Меняем текст кнопки
+            }
         });
     </script>
 </body>
